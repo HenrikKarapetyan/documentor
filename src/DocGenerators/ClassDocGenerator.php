@@ -2,6 +2,7 @@
 
 namespace Henrik\Documentor\DocGenerators;
 
+use Henrik\Documentor\Utils\DocParser;
 use ReflectionClass;
 
 class ClassDocGenerator implements GeneratorInterface
@@ -18,13 +19,16 @@ class ClassDocGenerator implements GeneratorInterface
 
     public function __construct(private ReflectionClass $reflectionClass)
     {
-        if ($this->reflectionClass->getDocComment()) {
-            $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->reflectionClass->getName(), $this->reflectionClass->getDocComment()))->generate();
+        $classDoc = $this->reflectionClass->getDocComment();
+        if ($classDoc) {
+            $doc = new DocParser();
+            $parsedDoc = $doc->parse($classDoc);
+            $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->reflectionClass->getName(), $parsedDoc))->generate();
         }
 
         foreach ($this->reflectionClass->getProperties() as $property) {
             if ($property->isPublic()){
-                $this->addAttributeDocGenerator(new AttributesDocumentationGenerator($property));
+                $this->addAttributeDocGenerator(new PropertiesDocumentationGenerator($property));
             }
         }
     }
@@ -43,7 +47,7 @@ class ClassDocGenerator implements GeneratorInterface
         return $this->docLine;
     }
 
-    public function addAttributeDocGenerator(AttributesDocumentationGenerator $generator): void
+    public function addAttributeDocGenerator(PropertiesDocumentationGenerator $generator): void
     {
         $this->attributesDocGenerators[] = $generator;
     }

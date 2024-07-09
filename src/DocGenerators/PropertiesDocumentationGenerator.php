@@ -2,12 +2,12 @@
 
 namespace Henrik\Documentor\DocGenerators;
 
-use ReflectionAttribute;
+use ReflectionProperty;
 
-class AttributesDocumentationGenerator implements AttributesDocGeneratorInterface
+class PropertiesDocumentationGenerator implements PropertiesDocGeneratorInterface
 {
 
-    public function __construct(private \ReflectionProperty $property)
+    public function __construct(private readonly ReflectionProperty $property)
     {
     }
 

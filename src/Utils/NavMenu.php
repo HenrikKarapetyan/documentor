@@ -2,6 +2,9 @@
 
 namespace Henrik\Documentor\Utils;
 
+/**
+ * NavMenu
+ */
 class NavMenu implements MenuBuilderInterface
 {
 
