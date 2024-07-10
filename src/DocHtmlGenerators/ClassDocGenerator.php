@@ -25,19 +25,13 @@ class ClassDocGenerator implements GeneratorInterface
 
         $this->docLine .= (new ImplementedInterfacesDocGenerator($this->renderer, $this->reflectionClass->getInterfaceNames()))->generate();
 
-        foreach ($this->reflectionClass->getProperties() as $property) {
+        $this->docLine .=(new PropertiesDocumentationGenerator($this->renderer, $this->reflectionClass->getProperties()))->$this->generate();
 
-            $this->addAttributeDocGenerator(new PropertiesDocumentationGenerator($property));
 
-        }
     }
 
     public function generate(): string
     {
-
-        foreach ($this->attributesDocGenerators as $attributesDocGenerator) {
-            $this->docLine .= $attributesDocGenerator->generate();
-        }
 
         foreach ($this->methodDocGenerators as $methodDocGenerator) {
             $this->docLine .= $methodDocGenerator->generate();

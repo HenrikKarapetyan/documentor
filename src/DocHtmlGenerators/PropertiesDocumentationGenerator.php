@@ -2,18 +2,23 @@
 
 namespace Henrik\Documentor\DocHtmlGenerators;
 
+use Henrik\View\Renderer;
 use ReflectionProperty;
 
-class PropertiesDocumentationGenerator implements PropertiesDocGeneratorInterface
+class PropertiesDocumentationGenerator extends DocViewGenerator implements PropertiesDocGeneratorInterface
 {
 
-    public function __construct(private readonly ReflectionProperty $property)
+    /**
+     * @param Renderer $renderer
+     * @param ReflectionProperty[] $properties
+     */
+    public function __construct(Renderer $renderer, private readonly array $properties)
     {
+        parent::__construct($renderer);
     }
 
     public function generate(): string
     {
-        $attributeLine = $this->property->getName();
-        return sprintf('<div>%s</div><div>%s</div>', $attributeLine, $this->property->getDocComment());
+        return $this->renderer->render('class-doc/class-properties', ['properties' => $this->properties]);
     }
 }
