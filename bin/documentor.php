@@ -3,8 +3,8 @@
 use Henrik\Documentor\Documentor;
 
 require 'vendor/autoload.php';
-
+$configs = require '.documentor-config.php';
 $documentor = new Documentor();
-$documentor->setOutputDirectory(__DIR__ . '/../docs');
-$documentor->setNamespace('\\Henrik\\Documentor');
+$documentor->setOutputDirectory($configs['outputDirectory']);
+$documentor->setNamespace($configs['namespace']);
 $documentor->makeDocumentation();
