@@ -17197,6 +17197,11 @@ article > section > .row {
 .icon-trait:before {
     content: "T";
 }
+
+.icon-class:before {
+    content: "C";
+}
+
 .icon-check2:before {
     content: "\ebf7";
 }

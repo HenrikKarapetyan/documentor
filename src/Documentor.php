@@ -28,8 +28,7 @@ class Documentor implements DocumentorInterface
      */
     public function makeDocumentation(): void
     {
-        $classes = Filesystem::getPhpClassesFromDirectory($this->getSourcesDir(), $this->getNamespace(), $this->getExcludeDirectories());
-
+        $classes = Filesystem::getPhpSourcesFromDirectory($this->getSourcesDir(), $this->getNamespace(), $this->getExcludeDirectories());
 
         $this->createIndexFileAndCopyResources($classes);
 

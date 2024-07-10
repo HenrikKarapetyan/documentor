@@ -14,7 +14,7 @@ class NavbarBuilder
      */
     public function __construct(private readonly array $classesPath)
     {
-        $this->rootMenu = new NavMenu('Root');
+        $this->rootMenu = new NavMenu('Sources');
     }
 
     public function build(string $menuRootDir= ''): string
@@ -28,7 +28,17 @@ class NavbarBuilder
             $menu = $this->addIntoMenu($pathParts, $this->rootMenu);
             $url = str_replace("\\", DIRECTORY_SEPARATOR, ltrim($classPath, '\\')).'.html';
 
-            $menu->addMenuItem(new NavMenuItem($menuRootDir.$url, $filename));
+            $type = MenuItemTypes::CLASS_TYPE;
+
+            if (interface_exists($classPath)) {
+                $type = MenuItemTypes::INTERFACE_TYPE;
+            }
+
+            if (trait_exists($classPath)){
+                $type = MenuItemTypes::TRAIT_TYPE;
+            }
+
+            $menu->addMenuItem(new NavMenuItem($menuRootDir.$url, $filename, $type));
         }
 
         return $this->rootMenu->build();
