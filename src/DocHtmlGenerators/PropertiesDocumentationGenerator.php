@@ -19,6 +19,6 @@ class PropertiesDocumentationGenerator extends DocViewGenerator implements Prope
 
     public function generate(): string
     {
-        return $this->renderer->render('class-doc/class-properties', ['properties' => $this->properties]);
+        return $this->renderer->render('class-docs/class-properties', ['properties' => $this->properties]);
     }
 }
