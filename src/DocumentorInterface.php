@@ -2,6 +2,8 @@
 
 namespace Henrik\Documentor;
 
+use Henrik\View\Renderer;
+
 /**
  *
  */
@@ -56,5 +58,5 @@ interface DocumentorInterface
      * @param string $classOrInterface
      * @return string
      */
-    public function generateDocumentationForClass(string $classOrInterface): string;
+    public function generateDocumentationForClass(string $classOrInterface, Renderer $renderer): string;
 }

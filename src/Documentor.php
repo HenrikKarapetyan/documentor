@@ -5,6 +5,7 @@ namespace Henrik\Documentor;
 use Henrik\Documentor\DocHtmlGenerators\ClassDocGenerator;
 use Henrik\Documentor\Utils\NavbarBuilder;
 use Henrik\Filesystem\Filesystem;
+use Henrik\View\Renderer;
 use ReflectionClass;
 
 class Documentor implements DocumentorInterface
@@ -49,7 +50,7 @@ class Documentor implements DocumentorInterface
             $navMenus = $navbarBuilder->build();
             $renderer->addGlobal('navMenus', $navMenus);
 
-            $content = $this->generateDocumentationForClass($class);
+            $content = $this->generateDocumentationForClass($class, $renderer);
             $pageContent = $renderer->render('main-page', ['content' => $content]);
             Filesystem::createFile(path: $this->outputDirectory . $classDir . '.html', content: $pageContent);
         }
@@ -57,11 +58,11 @@ class Documentor implements DocumentorInterface
     }
 
 
-    public function generateDocumentationForClass(string $classOrInterface): string
+    public function generateDocumentationForClass(string $classOrInterface, Renderer $renderer): string
     {
         $reflectionClass = new ReflectionClass($classOrInterface);
 
-        return (new ClassDocGenerator($reflectionClass))->generate();
+        return (new ClassDocGenerator($reflectionClass, $renderer))->generate();
     }
 
     /**

@@ -3,13 +3,17 @@
 namespace Henrik\Documentor\DocHtmlGenerators;
 
 use Henrik\Documentor\Utils\DocParser;
+use Henrik\View\Renderer;
 
-class ClassOrInterfaceHeaderLineDocGenerator implements GeneratorInterface
+class ClassOrInterfaceHeaderLineDocGenerator extends DocViewGenerator
 {
     public function __construct(
+        Renderer $renderer,
         private readonly string $classNameLine,
         private readonly ?string $doc
-    ){}
+    ){
+        parent::__construct($renderer);
+    }
 
     public function generate(): string
     {
@@ -18,10 +22,6 @@ class ClassOrInterfaceHeaderLineDocGenerator implements GeneratorInterface
             $doc = new DocParser();
             $parsedDoc = $doc->parse($this->doc);
         }
-        $doc = '<section id="section-1">
-                            <h4 class="section-title-6 text-green">%s</h4>
-                            <p>%s</p>
-                        </section>';
-        return sprintf($doc, $this->classNameLine, $parsedDoc);
+        return$this->renderer->render('class-docs/class-or-interface-header-line',['className' => $this->classNameLine, 'docLine'=> $parsedDoc]);
     }
 }

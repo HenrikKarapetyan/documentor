@@ -2,7 +2,7 @@
 
 namespace Henrik\Documentor\DocHtmlGenerators;
 
-use Henrik\Documentor\Utils\DocParser;
+use Henrik\View\Renderer;
 use ReflectionClass;
 
 class ClassDocGenerator implements GeneratorInterface
@@ -15,17 +15,15 @@ class ClassDocGenerator implements GeneratorInterface
 
     private array $methodDocGenerators = [];
 
-    private string $docLine = '';
+    private string $docLine;
 
-    public function __construct(private readonly ReflectionClass $reflectionClass)
+    public function __construct(private readonly ReflectionClass $reflectionClass, private readonly Renderer $renderer)
     {
         $classDoc = $this->reflectionClass->getDocComment();
 
-        $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->reflectionClass->getShortName(), $classDoc))->generate();
+        $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->renderer, $this->reflectionClass->getShortName(), $classDoc))->generate();
 
-        $this->docLine .= (new ImplementedInterfacesDocGenerator($this->reflectionClass->getInterfaceNames()))->generate();
-
-        var_dump($this->reflectionClass->getInterfaceNames());
+        $this->docLine .= (new ImplementedInterfacesDocGenerator($this->renderer, $this->reflectionClass->getInterfaceNames()))->generate();
 
         foreach ($this->reflectionClass->getProperties() as $property) {
 
@@ -38,11 +36,11 @@ class ClassDocGenerator implements GeneratorInterface
     {
 
         foreach ($this->attributesDocGenerators as $attributesDocGenerator) {
-            $this->docLine.= $attributesDocGenerator->generate();
+            $this->docLine .= $attributesDocGenerator->generate();
         }
 
         foreach ($this->methodDocGenerators as $methodDocGenerator) {
-            $this->docLine.= $methodDocGenerator->generate();
+            $this->docLine .= $methodDocGenerator->generate();
         }
 
         return $this->docLine;
@@ -65,14 +63,16 @@ class ClassDocGenerator implements GeneratorInterface
      * @param MethodsDocumentationGenerator $generator
      * @return void
      */
-    public function addMethodDocGenerator(MethodsDocumentationGenerator $generator): void{
+    public function addMethodDocGenerator(MethodsDocumentationGenerator $generator): void
+    {
         $this->methodDocGenerators[] = $generator;
     }
 
     /**
      * @return array
      */
-    public function getMethodDocGenerators(): array{
+    public function getMethodDocGenerators(): array
+    {
         return $this->methodDocGenerators;
     }
 
