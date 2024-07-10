@@ -17,7 +17,7 @@ class NavbarBuilder
         $this->rootMenu = new NavMenu('Root');
     }
 
-    public function build(): string
+    public function build(string $menuRootDir= ''): string
     {
         foreach ($this->classesPath as $classPath) {
 
@@ -28,13 +28,7 @@ class NavbarBuilder
             $menu = $this->addIntoMenu($pathParts, $this->rootMenu);
             $url = str_replace("\\", DIRECTORY_SEPARATOR, ltrim($classPath, '\\')).'.html';
 
-            if ($this->isComputeMenuDeep()){
-                $menuDeep = count($pathParts);
-
-                $url = str_repeat('../',$menuDeep).$url;
-
-            }
-            $menu->addMenuItem(new NavMenuItem($url, $filename));
+            $menu->addMenuItem(new NavMenuItem($menuRootDir.$url, $filename));
         }
 
         return $this->rootMenu->build();

@@ -19,7 +19,7 @@ class NavMenu implements MenuBuilderInterface
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#menu-%s" role="button"
                            aria-expanded="true" aria-controls="menu-%s">%s</a>
-                        <div class="collapse show" id="menu-%s" data-parent="#%s">
+                        <div class="show" id="menu-%s" data-parent="#%s">
                             <ul class="nav flex-column">
                                %s
                             </ul>

@@ -2,6 +2,7 @@
 
 namespace Henrik\Documentor;
 
+use Henrik\Contracts\Filesystem\FileSystemExceptionInterface;
 use Henrik\Documentor\DocHtmlGenerators\ClassDocGenerator;
 use Henrik\Documentor\Utils\NavbarBuilder;
 use Henrik\Filesystem\Filesystem;
@@ -12,7 +13,6 @@ class Documentor implements DocumentorInterface
 {
 
     private string $sourcesDir = 'src';
-
     /**
      * @var string[]
      */
@@ -20,10 +20,12 @@ class Documentor implements DocumentorInterface
 
     private string $namespace = '';
 
-    public function __construct(){}
-
     private string $outputDirectory;
 
+    /**
+     * @throws \Throwable
+     * @throws FileSystemExceptionInterface
+     */
     public function makeDocumentation(): void
     {
         $classes = Filesystem::getPhpClassesFromDirectory($this->getSourcesDir(), $this->getNamespace(), $this->getExcludeDirectories());
@@ -32,27 +34,29 @@ class Documentor implements DocumentorInterface
         $this->createIndexFileAndCopyResources($classes);
 
         foreach ($classes as $class) {
-            $classDir = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+
+            $classDir = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $class), DIRECTORY_SEPARATOR);
+            $classDirPartsCount = count(explode(DIRECTORY_SEPARATOR, $classDir));
+            $baseUrl = str_repeat('../', $classDirPartsCount - 1);
 
 
-            $baseUrl = str_repeat('../',count(explode('/', $classDir))-2);
             $rendererFactory = new RendererFactory();
-            $rendererFactory->setAssetBaseUrl($baseUrl.'assets');
+            $rendererFactory->setAssetBaseUrl($baseUrl . 'assets');
 
             $renderer = $rendererFactory->getRenderer();
 
-            $renderer->addGlobal('baseUrl', $baseUrl.'index.html');
+            $renderer->addGlobal('baseUrl', $baseUrl . 'index.html');
 
 
             $navbarBuilder = new NavbarBuilder($classes);
             $navbarBuilder->setComputeMenuDeep(true);
 
-            $navMenus = $navbarBuilder->build();
+            $navMenus = $navbarBuilder->build($baseUrl);
             $renderer->addGlobal('navMenus', $navMenus);
 
             $content = $this->generateDocumentationForClass($class, $renderer);
             $pageContent = $renderer->render('main-page', ['content' => $content]);
-            Filesystem::createFile(path: $this->outputDirectory . $classDir . '.html', content: $pageContent);
+            Filesystem::createFile(path: $this->outputDirectory . DIRECTORY_SEPARATOR . $classDir . '.html', content: $pageContent);
         }
 
     }
@@ -138,7 +142,7 @@ class Documentor implements DocumentorInterface
         $renderer->addGlobal('navMenus', $navMenus);
         $renderer->addGlobal('baseUrl', 'index.html');
 
-        $pageContent = $renderer->render('main-page',['content'=>'sdsd']);
+        $pageContent = $renderer->render('main-page', ['content' => 'sdsd']);
         Filesystem::copyDirectory(__DIR__ . '/../resources/assets', $this->outputDirectory . '/assets');
         Filesystem::createFile(path: $this->outputDirectory . '/index.html', content: $pageContent);
 

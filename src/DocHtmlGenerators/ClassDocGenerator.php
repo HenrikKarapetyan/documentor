@@ -16,6 +16,7 @@ class ClassDocGenerator implements GeneratorInterface
 
         $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->renderer, $this->reflectionClass->getShortName(), $classDoc))->generate();
         $this->docLine .= (new ImplementedInterfacesDocGenerator($this->renderer, $this->reflectionClass->getInterfaceNames()))->generate();
+        $this->docLine .= (new TraitsDocGenerator($this->renderer,$this->reflectionClass->getTraits()))->generate();
         $this->docLine .= (new PropertiesDocumentationGenerator($this->renderer, $this->reflectionClass->getProperties()))->generate();
         $this->docLine .= (new MethodsDocumentationGenerator($this->renderer, $this->reflectionClass->getMethods()))->generate();
 
