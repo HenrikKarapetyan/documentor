@@ -2,7 +2,7 @@
 
 namespace Henrik\Documentor;
 
-use Henrik\Documentor\DocGenerators\ClassDocGenerator;
+use Henrik\Documentor\DocHtmlGenerators\ClassDocGenerator;
 use Henrik\Documentor\Utils\NavbarBuilder;
 use Henrik\Filesystem\Filesystem;
 use ReflectionClass;

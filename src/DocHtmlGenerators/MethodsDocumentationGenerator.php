@@ -1,6 +1,6 @@
 <?php
 
-namespace Henrik\Documentor\DocGenerators;
+namespace Henrik\Documentor\DocHtmlGenerators;
 
 class MethodsDocumentationGenerator implements MethodDocGeneratorInterface
 {
