@@ -19,7 +19,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "henrik/dependency-injector": "^1.0.5",
-        "henrik/view": "dev-main"
+        "henrik/view": "dev-main",
+        "henrik/filesystem": "dev-main"
     }
 }
