@@ -17,19 +17,20 @@ class ClassDocGenerator implements GeneratorInterface
 
     private string $docLine = '';
 
-    public function __construct(private ReflectionClass $reflectionClass)
+    public function __construct(private readonly ReflectionClass $reflectionClass)
     {
         $classDoc = $this->reflectionClass->getDocComment();
-        if ($classDoc) {
-            $doc = new DocParser();
-            $parsedDoc = $doc->parse($classDoc);
-            $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->reflectionClass->getName(), $parsedDoc))->generate();
-        }
+
+        $this->docLine = (new ClassOrInterfaceHeaderLineDocGenerator($this->reflectionClass->getShortName(), $classDoc))->generate();
+
+        $this->docLine .= (new ImplementedInterfacesDocGenerator($this->reflectionClass->getInterfaceNames()))->generate();
+
+        var_dump($this->reflectionClass->getInterfaceNames());
 
         foreach ($this->reflectionClass->getProperties() as $property) {
-            if ($property->isPublic()){
-                $this->addAttributeDocGenerator(new PropertiesDocumentationGenerator($property));
-            }
+
+            $this->addAttributeDocGenerator(new PropertiesDocumentationGenerator($property));
+
         }
     }
 
