@@ -17,7 +17,8 @@ use Henrik\View\Renderer;
 
                     foreach ($properties as $property) {
                         echo '<li class="list-group-item d-flex align-items-center">
-                             ' . $property->getName() . '
+                             Name: ' . $property->getName() . '</br>
+                             Type: ' . $property->getType() . '</br>
                           </li>';
                     }
 
