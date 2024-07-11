@@ -2,12 +2,12 @@
 
 namespace Henrik\Documentor\Utils;
 
+use Henrik\View\Renderer;
+
 class NavbarBuilder
 {
 
     private NavMenu $rootMenu;
-
-    private bool $computeMenuDeep = false;
 
     /**
      * @param string[] $classesPath
@@ -17,7 +17,7 @@ class NavbarBuilder
         $this->rootMenu = new NavMenu('Sources');
     }
 
-    public function build(string $menuRootDir= ''): string
+    public function build(Renderer $renderer,string $menuRootDir = ''): string
     {
         foreach ($this->classesPath as $classPath) {
 
@@ -26,22 +26,14 @@ class NavbarBuilder
             $filename = array_pop($pathParts);
 
             $menu = $this->addIntoMenu($pathParts, $this->rootMenu);
-            $url = str_replace("\\", DIRECTORY_SEPARATOR, ltrim($classPath, '\\')).'.html';
+            $url = str_replace("\\", DIRECTORY_SEPARATOR, ltrim($classPath, '\\')) . '.html';
 
-            $type = MenuItemTypes::CLASS_TYPE;
+            $type = $this->getMenuItemType($classPath);
 
-            if (interface_exists($classPath)) {
-                $type = MenuItemTypes::INTERFACE_TYPE;
-            }
-
-            if (trait_exists($classPath)){
-                $type = MenuItemTypes::TRAIT_TYPE;
-            }
-
-            $menu->addMenuItem(new NavMenuItem($menuRootDir.$url, $filename, $type));
+            $menu->addMenuItem(new NavMenuItem($menuRootDir . $url, $filename, $type));
         }
 
-        return $this->rootMenu->build();
+        return $this->rootMenu->build($renderer);
     }
 
     private function addIntoMenu(array $pathParts, NavMenu $menu = null): ?NavMenu
@@ -63,13 +55,19 @@ class NavbarBuilder
 
     }
 
-    public function isComputeMenuDeep(): bool
+    private function getMenuItemType(string $classPath): MenuItemTypes
     {
-        return $this->computeMenuDeep;
-    }
+        if (interface_exists($classPath)) {
+            return MenuItemTypes::INTERFACE_TYPE;
+        }
 
-    public function setComputeMenuDeep(bool $computeMenuDeep): void
-    {
-        $this->computeMenuDeep = $computeMenuDeep;
+        if (trait_exists($classPath)) {
+            return MenuItemTypes::TRAIT_TYPE;
+        }
+
+        if (enum_exists($classPath)) {
+            return MenuItemTypes::ENUM_TYPE;
+        }
+        return MenuItemTypes::CLASS_TYPE;
     }
 }

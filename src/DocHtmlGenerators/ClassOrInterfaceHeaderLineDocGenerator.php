@@ -2,7 +2,7 @@
 
 namespace Henrik\Documentor\DocHtmlGenerators;
 
-use Henrik\Documentor\Utils\DocParser;
+use Henrik\Documentor\Utils\DocCommentParser;
 use Henrik\View\Renderer;
 
 class ClassOrInterfaceHeaderLineDocGenerator extends DocViewGenerator
@@ -19,7 +19,7 @@ class ClassOrInterfaceHeaderLineDocGenerator extends DocViewGenerator
     {
         $parsedDoc = '';
         if ($this->doc){
-            $doc = new DocParser();
+            $doc = new DocCommentParser();
             $parsedDoc = $doc->parse($this->doc);
         }
         return$this->renderer->render('class-docs/class-or-interface-header-line',['className' => $this->classNameLine, 'docLine'=> $parsedDoc]);

@@ -2,7 +2,7 @@
 
 namespace Henrik\Documentor\Utils;
 
-class DocParser implements DocParserInterface
+class DocCommentParser implements DocCommentParserInterface
 {
 
     public function parse(string $doc): string

@@ -2,6 +2,8 @@
 
 namespace Henrik\Documentor\Utils;
 
+use Henrik\View\Renderer;
+
 /**
  * NavMenu
  */
@@ -15,17 +17,6 @@ class NavMenu implements MenuBuilderInterface
     {
     }
 
-    private const TEMPLATE = '<ul id="%s" class="nav flex-column nav-vertical-2">
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#menu-%s" role="button"
-                           aria-expanded="true" aria-controls="menu-%s">%s</a>
-                        <div class="show" id="menu-%s" data-parent="#%s">
-                            <ul class="nav flex-column">
-                               %s
-                            </ul>
-                        </div>
-                    </li>
-                </ul>';
     /**
      * @var MenuBuilderInterface[]
      */
@@ -60,23 +51,20 @@ class NavMenu implements MenuBuilderInterface
         $this->menuItems[] = $menuItem;
     }
 
-    public function build(): string
+    public function build(Renderer $renderer): string
     {
         $menuItemsLine = '';
 
         foreach ($this->menuItems as $menuItem) {
-            $menuItemsLine .= $menuItem->build();
+            $menuItemsLine .= $menuItem->build($renderer);
         }
 
-        return sprintf(
-            self::TEMPLATE,
-            $this->menuName,
-            $this->menuName,
-            $this->menuName,
-            $this->menuName,
-            $this->menuName,
-            $this->menuName,
-            $menuItemsLine
+        return $renderer->render(
+            'navigation/navigation-menu',
+            [
+                'menuItems' => $menuItemsLine,
+                'menuName' => $this->menuName
+            ]
         );
     }
 

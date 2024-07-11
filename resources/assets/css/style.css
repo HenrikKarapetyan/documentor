@@ -17202,6 +17202,10 @@ article > section > .row {
     content: "C";
 }
 
+.icon-enum:before {
+    content: "E";
+}
+
 .icon-check2:before {
     content: "\ebf7";
 }

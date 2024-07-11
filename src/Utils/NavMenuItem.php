@@ -2,20 +2,29 @@
 
 namespace Henrik\Documentor\Utils;
 
+use Henrik\View\Renderer;
+
 class NavMenuItem implements MenuBuilderInterface
 {
 
-    public function __construct(private readonly string $url, private readonly string $name, private readonly MenuItemTypes $type)
+    public function __construct(
+        private readonly string        $url,
+        private readonly string        $name,
+        private readonly MenuItemTypes $type
+    )
     {
     }
 
-
-    private const TEMPLATE = '<li class="nav-item">
-                                    <a class="nav-link" href="%s"><i class="%s"></i> %s</a>
-                                </li>';
-    public function build(): string
+    public function build(Renderer $renderer): string
     {
-        return sprintf(self::TEMPLATE,$this->url,$this->getIcon($this->type),$this->name);
+        return $renderer->render(
+            'navigation/navigation-menu-item',
+            [
+                'url' => $this->url,
+                'icon' => $this->getIcon($this->type),
+                'name' => $this->name
+            ]
+        );
     }
 
     public function getName(): string
@@ -24,18 +33,13 @@ class NavMenuItem implements MenuBuilderInterface
     }
 
 
-    private function getIcon(MenuItemTypes $type){
-
-        if ($type == MenuItemTypes::CLASS_TYPE){
-            return 'icon-class';
-        }
-
-        if ($type == MenuItemTypes::INTERFACE_TYPE){
-            return 'icon-interface';
-        }
-        if ($type == MenuItemTypes::TRAIT_TYPE){
-            return 'icon-trait';
-        }
-        return 'icon-link';
+    private function getIcon(MenuItemTypes $type): string
+    {
+        return match ($type) {
+            MenuItemTypes::CLASS_TYPE => 'icon-class',
+            MenuItemTypes::INTERFACE_TYPE => 'icon-interface',
+            MenuItemTypes::TRAIT_TYPE => 'icon-trait',
+            MenuItemTypes::ENUM_TYPE => 'icon-enum',
+        };
     }
 }

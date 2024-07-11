@@ -4,6 +4,7 @@ namespace Henrik\Documentor;
 
 use Henrik\Contracts\Filesystem\FileSystemExceptionInterface;
 use Henrik\Documentor\DocHtmlGenerators\ClassDocGenerator;
+use Henrik\Documentor\Traits\SimpleTrait;
 use Henrik\Documentor\Utils\NavbarBuilder;
 use Henrik\Filesystem\Filesystem;
 use Henrik\View\Renderer;
@@ -11,6 +12,7 @@ use ReflectionClass;
 
 class Documentor implements DocumentorInterface
 {
+    use SimpleTrait;
 
     private string $sourcesDir = 'src';
     /**
@@ -48,9 +50,8 @@ class Documentor implements DocumentorInterface
 
 
             $navbarBuilder = new NavbarBuilder($classes);
-            $navbarBuilder->setComputeMenuDeep(true);
 
-            $navMenus = $navbarBuilder->build($baseUrl);
+            $navMenus = $navbarBuilder->build($renderer,$baseUrl);
             $renderer->addGlobal('navMenus', $navMenus);
 
             $content = $this->generateDocumentationForClass($class, $renderer);
@@ -137,7 +138,7 @@ class Documentor implements DocumentorInterface
         Filesystem::deleteDirectory($this->outputDirectory);
         Filesystem::mkdir($this->outputDirectory);
 
-        $navMenus = (new NavbarBuilder($classes))->build();
+        $navMenus = (new NavbarBuilder($classes))->build($renderer);
         $renderer->addGlobal('navMenus', $navMenus);
         $renderer->addGlobal('baseUrl', 'index.html');
 

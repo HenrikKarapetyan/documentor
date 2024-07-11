@@ -2,7 +2,7 @@
 
 namespace Henrik\Documentor\Utils;
 
-interface DocParserInterface
+interface DocCommentParserInterface
 {
 
     public function parse(string $doc): string;
