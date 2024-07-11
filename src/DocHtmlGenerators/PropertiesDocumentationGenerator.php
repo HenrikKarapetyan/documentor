@@ -7,9 +7,8 @@ use ReflectionProperty;
 
 class PropertiesDocumentationGenerator extends DocViewGenerator implements PropertiesDocGeneratorInterface
 {
-
     /**
-     * @param Renderer $renderer
+     * @param Renderer             $renderer
      * @param ReflectionProperty[] $properties
      */
     public function __construct(Renderer $renderer, private readonly array $properties)

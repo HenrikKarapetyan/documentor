@@ -6,8 +6,5 @@ use Henrik\View\Renderer;
 
 abstract class DocViewGenerator implements GeneratorInterface
 {
-
-    public function __construct(protected Renderer $renderer)
-    {
-    }
+    public function __construct(protected Renderer $renderer) {}
 }

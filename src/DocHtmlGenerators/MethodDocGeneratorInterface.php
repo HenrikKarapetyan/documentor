@@ -2,7 +2,4 @@
 
 namespace Henrik\Documentor\DocHtmlGenerators;
 
-interface MethodDocGeneratorInterface extends GeneratorInterface
-{
-
-}
+interface MethodDocGeneratorInterface extends GeneratorInterface {}

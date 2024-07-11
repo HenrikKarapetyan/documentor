@@ -6,3 +6,11 @@ src/SampleClasses
 public
 docs
 .documentor-config.php
+
+phpmd-report.html
+.php-cs-fixer.cache
+
+examples
+
+.phpunit.cache
+coverage

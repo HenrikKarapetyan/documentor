@@ -9,17 +9,19 @@ class RendererFactory
 {
     private string $viewsDirectory = __DIR__ . '/../resources/templates';
     private string $assetsBasePath = __DIR__ . '/../resources/assets';
-    private string $assetBaseUrl = 'assets';
-    private string $appVersion = '0.0.1';
-    private string $appName = 'App';
-    public function getRenderer():Renderer
+    private string $assetBaseUrl   = 'assets';
+    private string $appVersion     = '0.0.1';
+    private string $appName        = 'App';
+
+    public function getRenderer(): Renderer
     {
         $renderer = new Renderer(viewDirectory: $this->viewsDirectory);
 
-        $assetExtension = new AssetExtension(basePath: $this->assetsBasePath,baseUrl:  $this->assetBaseUrl);
+        $assetExtension = new AssetExtension(basePath: $this->assetsBasePath, baseUrl: $this->assetBaseUrl);
         $renderer->addExtension($assetExtension);
         $renderer->addGlobal('appVersion', $this->appVersion);
         $renderer->addGlobal('appName', $this->appName);
+
         return $renderer;
     }
 

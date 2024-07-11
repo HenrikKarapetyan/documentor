@@ -4,12 +4,8 @@ namespace Henrik\Documentor;
 
 use Henrik\View\Renderer;
 
-/**
- *
- */
 interface DocumentorInterface
 {
-
     /**
      * @return void
      */
@@ -17,12 +13,14 @@ interface DocumentorInterface
 
     /**
      * @param string $outputDirectory
+     *
      * @return void
      */
     public function setOutputDirectory(string $outputDirectory): void;
 
     /**
      * @param string $directory
+     *
      * @return void
      */
     public function setSourcesDir(string $directory): void;
@@ -34,6 +32,7 @@ interface DocumentorInterface
 
     /**
      * @param string $namespace
+     *
      * @return void
      */
     public function setNamespace(string $namespace): void;
@@ -45,6 +44,7 @@ interface DocumentorInterface
 
     /**
      * @param string[] $excludeDirectories
+     *
      * @return void
      */
     public function setExcludeDirectories(array $excludeDirectories): void;
@@ -55,7 +55,9 @@ interface DocumentorInterface
     public function getExcludeDirectories(): array;
 
     /**
-     * @param string $classOrInterface
+     * @param string   $classOrInterface
+     * @param Renderer $renderer
+     *
      * @return string
      */
     public function generateDocumentationForClass(string $classOrInterface, Renderer $renderer): string;

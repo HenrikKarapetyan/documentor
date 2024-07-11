@@ -6,7 +6,6 @@ use Henrik\View\Renderer;
 
 class NavbarBuilder
 {
-
     private NavMenu $rootMenu;
 
     /**
@@ -17,7 +16,7 @@ class NavbarBuilder
         $this->rootMenu = new NavMenu('Sources');
     }
 
-    public function build(Renderer $renderer,string $menuRootDir = ''): string
+    public function build(Renderer $renderer, string $menuRootDir = ''): string
     {
         foreach ($this->classesPath as $classPath) {
 
@@ -26,7 +25,7 @@ class NavbarBuilder
             $filename = array_pop($pathParts);
 
             $menu = $this->addIntoMenu($pathParts, $this->rootMenu);
-            $url = str_replace("\\", DIRECTORY_SEPARATOR, ltrim($classPath, '\\')) . '.html';
+            $url  = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($classPath, '\\')) . '.html';
 
             $type = $this->getMenuItemType($classPath);
 
@@ -36,21 +35,22 @@ class NavbarBuilder
         return $this->rootMenu->build($renderer);
     }
 
-    private function addIntoMenu(array $pathParts, NavMenu $menu = null): ?NavMenu
+    private function addIntoMenu(array $pathParts, ?NavMenu $menu = null): ?NavMenu
     {
         if (empty($pathParts)) {
             return $menu;
         }
         $menuId = array_shift($pathParts);
 
-
         if ($menu->isExistsMenu($menuId)) {
             $existingMenu = $menu->getSubmenu($menuId);
+
             return $this->addIntoMenu($pathParts, $existingMenu);
         }
 
         $newMenu = new NavMenu($menuId);
         $menu->addMenuItem($newMenu);
+
         return $this->addIntoMenu($pathParts, $newMenu);
 
     }
@@ -68,6 +68,7 @@ class NavbarBuilder
         if (enum_exists($classPath)) {
             return MenuItemTypes::ENUM_TYPE;
         }
+
         return MenuItemTypes::CLASS_TYPE;
     }
 }

@@ -5,22 +5,19 @@ namespace Henrik\Documentor\Navigation;
 use Henrik\View\Renderer;
 
 /**
- * NavMenu
+ * NavMenu.
  */
 class NavMenu implements MenuBuilderInterface
 {
-
     /** @var NavMenu[] */
     private array $submenus = [];
-
-    public function __construct(private readonly string $menuName)
-    {
-    }
 
     /**
      * @var MenuBuilderInterface[]
      */
     private array $menuItems = [];
+
+    public function __construct(private readonly string $menuName) {}
 
     public function getMenuItems(): array
     {
@@ -51,11 +48,6 @@ class NavMenu implements MenuBuilderInterface
         $this->menuItems[] = $menuItem;
     }
 
-
-    private function sortMenuItems(): void
-    {
-        sort($this->menuItems);
-    }
     public function build(Renderer $renderer): string
     {
         $this->sortMenuItems();
@@ -69,7 +61,7 @@ class NavMenu implements MenuBuilderInterface
             'navigation/navigation-menu',
             [
                 'menuItems' => $menuItemsLine,
-                'menuName' => $this->menuName
+                'menuName'  => $this->menuName,
             ]
         );
     }
@@ -77,5 +69,10 @@ class NavMenu implements MenuBuilderInterface
     public function getName(): string
     {
         return $this->menuName;
+    }
+
+    private function sortMenuItems(): void
+    {
+        sort($this->menuItems);
     }
 }

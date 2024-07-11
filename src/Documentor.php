@@ -8,6 +8,7 @@ use Henrik\Documentor\Navigation\NavbarBuilder;
 use Henrik\Filesystem\Filesystem;
 use Henrik\View\Renderer;
 use ReflectionClass;
+use Throwable;
 
 class Documentor implements DocumentorInterface
 {
@@ -22,7 +23,7 @@ class Documentor implements DocumentorInterface
     private string $outputDirectory;
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      * @throws FileSystemExceptionInterface
      */
     public function makeDocumentation(): void
@@ -33,10 +34,9 @@ class Documentor implements DocumentorInterface
 
         foreach ($classes as $class) {
 
-            $classDir = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $class), DIRECTORY_SEPARATOR);
+            $classDir           = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $class), DIRECTORY_SEPARATOR);
             $classDirPartsCount = count(explode(DIRECTORY_SEPARATOR, $classDir));
-            $baseUrl = str_repeat('../', $classDirPartsCount - 1);
-
+            $baseUrl            = str_repeat('../', $classDirPartsCount - 1);
 
             $rendererFactory = new RendererFactory();
             $rendererFactory->setAssetBaseUrl($baseUrl . 'assets');
@@ -45,19 +45,17 @@ class Documentor implements DocumentorInterface
 
             $renderer->addGlobal('baseUrl', $baseUrl . 'index.html');
 
-
             $navbarBuilder = new NavbarBuilder($classes);
 
-            $navMenus = $navbarBuilder->build($renderer,$baseUrl);
+            $navMenus = $navbarBuilder->build($renderer, $baseUrl);
             $renderer->addGlobal('navMenus', $navMenus);
 
-            $content = $this->generateDocumentationForClass($class, $renderer);
+            $content     = $this->generateDocumentationForClass($class, $renderer);
             $pageContent = $renderer->render('main-page', ['content' => $content]);
             Filesystem::createFile(path: $this->outputDirectory . DIRECTORY_SEPARATOR . $classDir . '.html', content: $pageContent);
         }
 
     }
-
 
     public function generateDocumentationForClass(string $classOrInterface, Renderer $renderer): string
     {
@@ -125,9 +123,11 @@ class Documentor implements DocumentorInterface
 
     /**
      * @param string[] $classes
+     *
+     * @throws FileSystemExceptionInterface
+     * @throws Throwable
+     *
      * @return void
-     * @throws \Henrik\Contracts\Filesystem\FileSystemExceptionInterface
-     * @throws \Throwable
      */
     private function createIndexFileAndCopyResources(array $classes): void
     {
@@ -144,5 +144,4 @@ class Documentor implements DocumentorInterface
         Filesystem::createFile(path: $this->outputDirectory . '/index.html', content: $pageContent);
 
     }
-
 }
