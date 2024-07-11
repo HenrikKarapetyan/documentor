@@ -22,6 +22,7 @@ class NavMenuItem implements MenuBuilderInterface
             [
                 'url' => $this->url,
                 'icon' => $this->getIcon($this->type),
+                'color' => $this->getColorByItemType($this->type),
                 'name' => $this->name
             ]
         );
@@ -30,6 +31,17 @@ class NavMenuItem implements MenuBuilderInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+
+    public function getColorByItemType(MenuItemTypes $type): string
+    {
+        return match ($type) {
+            MenuItemTypes::CLASS_TYPE => 'facebook',
+            MenuItemTypes::INTERFACE_TYPE => 'green',
+            MenuItemTypes::TRAIT_TYPE => 'cyan',
+            MenuItemTypes::ENUM_TYPE => 'orange',
+        };
     }
 
 

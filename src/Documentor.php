@@ -5,15 +5,12 @@ namespace Henrik\Documentor;
 use Henrik\Contracts\Filesystem\FileSystemExceptionInterface;
 use Henrik\Documentor\DocHtmlGenerators\ClassDocGenerator;
 use Henrik\Documentor\Navigation\NavbarBuilder;
-use Henrik\Documentor\Traits\SimpleTrait;
 use Henrik\Filesystem\Filesystem;
 use Henrik\View\Renderer;
 use ReflectionClass;
 
 class Documentor implements DocumentorInterface
 {
-    use SimpleTrait;
-
     private string $sourcesDir = 'src';
     /**
      * @var string[]

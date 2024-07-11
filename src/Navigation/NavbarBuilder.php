@@ -38,11 +38,11 @@ class NavbarBuilder
 
     private function addIntoMenu(array $pathParts, NavMenu $menu = null): ?NavMenu
     {
-        $menuId = array_shift($pathParts);
-
-        if (count($pathParts) === 0) {
+        if (empty($pathParts)) {
             return $menu;
         }
+        $menuId = array_shift($pathParts);
+
 
         if ($menu->isExistsMenu($menuId)) {
             $existingMenu = $menu->getSubmenu($menuId);

@@ -51,8 +51,14 @@ class NavMenu implements MenuBuilderInterface
         $this->menuItems[] = $menuItem;
     }
 
+
+    private function sortMenuItems(): void
+    {
+        sort($this->menuItems);
+    }
     public function build(Renderer $renderer): string
     {
+        $this->sortMenuItems();
         $menuItemsLine = '';
 
         foreach ($this->menuItems as $menuItem) {
