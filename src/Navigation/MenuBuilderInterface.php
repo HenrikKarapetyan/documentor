@@ -1,6 +1,6 @@
 <?php
 
-namespace Henrik\Documentor\Utils;
+namespace Henrik\Documentor\Navigation;
 
 use Henrik\View\Renderer;
 
